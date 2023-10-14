@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const userRoutes = require('../routes/user');
+const authRoutes = require('../routes/auth');
 const { cafeConnection } = require('../database/config');
 // const app = express();
 
@@ -11,6 +12,7 @@ class Server {
         this.app = express();
         this.port = process.env.PORT;
         this.userPath = '/api/user';
+        this.authPath = '/api/auth';
 
         //  Conectar a base de datos
         this.conectarDB();
@@ -36,6 +38,7 @@ class Server {
     }
 
     routes() {
+        this.app.use(this.authPath, authRoutes);
         this.app.use(this.userPath, userRoutes);
     }
 

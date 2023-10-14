@@ -3,13 +3,15 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
 
-const userGet = (req, res = response) => {
-    const { p, name, galleta = 'vainilla' } = req.query;
+const userGet = async(req, res = response) => {
+    const { id } = req.params;
+    const user = await User.findById(id);
+const {user: userFromToken} = req;
+
     res.json({
         ok: true,
-        p,
-        name,
-        galleta
+        user,
+        userFromToken
     });
 }
 

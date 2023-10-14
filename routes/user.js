@@ -4,10 +4,20 @@ const { check } = require('express-validator');
 const { validateFields } = require('../middlewares/validate-fields');
 const { validateRole } = require('../middlewares/validate-role');
 const { validateEmail, userByIdExists } = require('../helpers/db-validators');
+const { validateJWT } = require('../middlewares/validate-jwt');
+const { isAdminRol, hasAnyRoleOf } = require('../middlewares/validate-has-role');
 
 const router = Router();
 
 router.get('/', usersGet);
+
+router.get('/:id', 
+[
+    validateJWT, 
+    // isAdminRol,
+    hasAnyRoleOf('SALES_ROLE', 'USER_ROLE', 'ADMIN_ROLE')
+], 
+userGet);
 
 router.post('/', [
     check('name', 'Name is required').not().isEmpty(),
